@@ -14,9 +14,11 @@ class CreateAlbumImageTable extends Migration
     public function up()
     {
         Schema::create('album_image', function (Blueprint $table) {
-            $table->increments('id');
+            $table->primary(['album_id', 'image_id']);
+
             $table->unsignedInteger('album_id');
-			$table->unsignedInteger('image_id');
+            $table->unsignedInteger('image_id');
+
             $table->foreign('album_id')->references('id')->on('albums')->onDelete('cascade');
             $table->foreign('image_id')->references('id')->on('images')->onDelete('cascade');
             $table->timestamps();

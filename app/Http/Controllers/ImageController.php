@@ -256,6 +256,7 @@ class ImageController extends Controller
         $rate = $this->imageRepository->rateImage ($user, $image, $request->value);
         $this->imageRepository->setImageRate ($image);
 
+
         // Notification
         $notificationRepository->deleteDuplicate($user, $image);
         $image->user->notify(new ImageRated($image, $request->value, $user->id));

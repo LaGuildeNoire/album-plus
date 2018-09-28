@@ -19,7 +19,6 @@ class AlbumImageTableSeeder extends Seeder
         \DB::table('album_image')->insert(array (
             0 => 
             array (
-                'id' => 1,
                 'album_id' => 2,
                 'image_id' => 43,
                 'created_at' => NULL,
@@ -27,7 +26,6 @@ class AlbumImageTableSeeder extends Seeder
             ),
             1 => 
             array (
-                'id' => 2,
                 'album_id' => 2,
                 'image_id' => 42,
                 'created_at' => NULL,
@@ -35,7 +33,6 @@ class AlbumImageTableSeeder extends Seeder
             ),
             2 => 
             array (
-                'id' => 3,
                 'album_id' => 1,
                 'image_id' => 37,
                 'created_at' => NULL,
@@ -43,7 +40,6 @@ class AlbumImageTableSeeder extends Seeder
             ),
             3 => 
             array (
-                'id' => 4,
                 'album_id' => 3,
                 'image_id' => 32,
                 'created_at' => NULL,
@@ -51,7 +47,6 @@ class AlbumImageTableSeeder extends Seeder
             ),
             4 => 
             array (
-                'id' => 5,
                 'album_id' => 2,
                 'image_id' => 35,
                 'created_at' => NULL,
@@ -59,7 +54,6 @@ class AlbumImageTableSeeder extends Seeder
             ),
             5 => 
             array (
-                'id' => 6,
                 'album_id' => 3,
                 'image_id' => 29,
                 'created_at' => NULL,
@@ -67,7 +61,6 @@ class AlbumImageTableSeeder extends Seeder
             ),
             6 => 
             array (
-                'id' => 7,
                 'album_id' => 1,
                 'image_id' => 27,
                 'created_at' => NULL,
@@ -75,7 +68,6 @@ class AlbumImageTableSeeder extends Seeder
             ),
             7 => 
             array (
-                'id' => 8,
                 'album_id' => 1,
                 'image_id' => 24,
                 'created_at' => NULL,
@@ -83,7 +75,6 @@ class AlbumImageTableSeeder extends Seeder
             ),
             8 => 
             array (
-                'id' => 9,
                 'album_id' => 3,
                 'image_id' => 22,
                 'created_at' => NULL,
@@ -91,7 +82,6 @@ class AlbumImageTableSeeder extends Seeder
             ),
             9 => 
             array (
-                'id' => 10,
                 'album_id' => 1,
                 'image_id' => 19,
                 'created_at' => NULL,
@@ -99,7 +89,6 @@ class AlbumImageTableSeeder extends Seeder
             ),
             10 => 
             array (
-                'id' => 11,
                 'album_id' => 2,
                 'image_id' => 14,
                 'created_at' => NULL,
@@ -107,7 +96,6 @@ class AlbumImageTableSeeder extends Seeder
             ),
             11 => 
             array (
-                'id' => 12,
                 'album_id' => 2,
                 'image_id' => 16,
                 'created_at' => NULL,

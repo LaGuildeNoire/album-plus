@@ -18,8 +18,8 @@ class NotificationRepository
         DB::table('notifications')
             ->whereNotifiableId($image->user->id)
             ->whereNull('read_at')
-            ->where('data->image_id', $image->id)
-            ->where('data->user', $user->id)
+            ->where(DB::raw('JSON_EXTRACT(`data`, "$.image_id")'), '=', $image->id)
+            ->where(DB::raw('JSON_EXTRACT(`data`, "$.user")'), '=', $user->id)
             ->delete();
     }
 }
