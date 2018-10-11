@@ -21,9 +21,10 @@ class CreateImagesTable extends Migration
             $table->string('description')->nullable();
             $table->boolean('adult')->default(false);
             $table->integer ('clicks')->unsigned()->default(0);
+            $table->timestamps();
+
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->timestamps();
         });
     }
 

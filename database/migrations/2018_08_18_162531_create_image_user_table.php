@@ -17,7 +17,7 @@ class CreateImageUserTable extends Migration
             $table->unsignedInteger('image_id')->index();
 
             $table->timestamps();
-            $table->integer('rating');
+            $table->integer('rating')->nullable();
             $table->text('comment')->nullable();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

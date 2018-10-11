@@ -42,7 +42,7 @@ class ImageRepository
     {
         $images = $query->paginate (config ('app.pagination'));
 
-        return $this->setRating ($images);
+        return $this->setRatingAndComments ($images);
     }
 
     /**
@@ -71,15 +71,16 @@ class ImageRepository
     }
 
     /**
-     * Set rating values for images.
+     * Set rating values and comments for images.
      *
      * @param  \Illuminate\Pagination\LengthAwarePaginator
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    public function setRating($images)
+    public function setRatingAndComments($images)
     {
         $images->transform(function ($image) {
             $this->setImageRate ($image);
+            $this->setPivot($image);
             return $image;
         });
 
@@ -97,6 +98,12 @@ class ImageRepository
         $number = $image->users->count();
 
         $image->rate = $number ? $image->users->pluck ('pivot.rating')->sum () / $number : 0;
+    }
+
+    /***/
+    public function setPivot($image)
+    {
+        $image->pivot = $image->users->pluck('pivot')->all();
     }
 
     /**
@@ -171,13 +178,25 @@ class ImageRepository
     }
 
     /**
-     * Rate image.
+     * Check is user is comment owner.
      *
      * @param  \App\Models\User
      * @param  \App\Models\Image
-     * @param  integer
      * @return boolean
      */
+    public function isCommentOwner($user, $image)
+    {
+        return $image->user()->where('users.id', $user->id)->pluck('pivot')->exists();
+    }
+
+    /**
+ * Rate image.
+ *
+ * @param  \App\Models\User
+ * @param  \App\Models\Image
+ * @param  integer
+ * @return boolean
+ */
     public function rateImage($user, $image, $value)
     {
         $rate = $image->users()->where('users.id', $user->id)->pluck('rating')->first();
@@ -191,6 +210,29 @@ class ImageRepository
         }
 
         return $rate;
+    }
+
+    /**
+     * Comment image.
+     *
+     * @param  \App\Models\User
+     * @param  \App\Models\Image
+     * @param  integer
+     * @return boolean
+     */
+    public function commentImage($user, $image, $comment)
+    {
+        $oldcomment = $image->users()->where('users.id', $user->id)->pluck('pivot')->first()->comment;
+
+        if($oldcomment) {
+            if($oldcomment !== $comment) {
+                $image->users()->updateExistingPivot ($user->id, ['comment' => $comment]);
+            }
+        } else {
+            $image->users()->attach  ($user->id, ['comment' => $comment]);
+        }
+
+        return $comment;
     }
 
     /**

@@ -29,7 +29,8 @@
         <div class="card-columns">
             @foreach($images as $image)
                 <div class="card @if($image->adult) border-danger @endif" id="image{{ $image->id }}">
-                    <a href="{{ url('images/' . $image->name) }}" class="image-link" data-link="{{ route('image.click', $image->id) }}">
+                    <a href="{{ url('images/' . $image->name) }}" class="image-link"
+                       data-link="{{ route('image.click', $image->id) }}">
                         <img class="card-img-top"
                              src="{{ url('thumbs/' . $image->name) }}"
                              alt="image">
@@ -46,24 +47,31 @@
                         </em>
                         <div class="pull-right">
                             <em>
-                                (<span class="image-click">{{ $image->clicks }}</span> {{ trans_choice(__('vue|vues'), $image->clicks) }}) {{ $image->created_at->formatLocalized('%x') }}
+                                (<span
+                                    class="image-click">{{ $image->clicks }}</span> {{ trans_choice(__('vue|vues'), $image->clicks) }}
+                                ) {{ $image->created_at->formatLocalized('%x') }}
                             </em>
                         </div>
                         <div class="star-rating" id="{{ $image->id }}">
                             <span class="count-number">({{ $image->users->count() }})</span>
-                            <div id="{{ $image->id . '.5' }}" data-toggle="tooltip" title="5" @if($image->rate > 4) class="star-yellow" @endif>
+                            <div id="{{ $image->id . '.5' }}" data-toggle="tooltip" title="5"
+                                 @if($image->rate > 4) class="star-yellow" @endif>
                                 <i class="fas fa-star"></i>
                             </div>
-                            <div id="{{ $image->id . '.4' }}" data-toggle="tooltip" title="4" @if($image->rate > 3) class="star-yellow" @endif>
+                            <div id="{{ $image->id . '.4' }}" data-toggle="tooltip" title="4"
+                                 @if($image->rate > 3) class="star-yellow" @endif>
                                 <i class="fas fa-star"></i>
                             </div>
-                            <div id="{{ $image->id . '.3' }}" data-toggle="tooltip" title="3" @if($image->rate > 2) class="star-yellow" @endif>
+                            <div id="{{ $image->id . '.3' }}" data-toggle="tooltip" title="3"
+                                 @if($image->rate > 2) class="star-yellow" @endif>
                                 <i class="fas fa-star"></i>
                             </div>
-                            <div id="{{ $image->id . '.2' }}" data-toggle="tooltip" title="2" @if($image->rate > 1) class="star-yellow" @endif>
+                            <div id="{{ $image->id . '.2' }}" data-toggle="tooltip" title="2"
+                                 @if($image->rate > 1) class="star-yellow" @endif>
                                 <i class="fas fa-star"></i>
                             </div>
-                            <div id="{{ $image->id . '.1' }}" data-toggle="tooltip" title="1" @if($image->rate > 0) class="star-yellow" @endif>
+                            <div id="{{ $image->id . '.1' }}" data-toggle="tooltip" title="1"
+                                 @if($image->rate > 0) class="star-yellow" @endif>
                                 <i class="fas fa-star"></i>
                             </div>
                             <span class="pull-right">
@@ -112,6 +120,57 @@
                                 @endadminOrOwner
                             </span>
                         </div>
+                        <div class="card-group">
+                            {{ debug($image->pivot) }}
+                            @foreach($image->pivot as $comment)
+                                @if($comment->comment)
+                                    <div class="card-header col-12">
+                                        {{ $image->users->where("id", $comment->user_id)->first()->name }}
+                                        @adminOrOwner($image->users->where("id", $comment->user_id)->first()->id)
+                                        <span class="pull-right">
+                                            <a class="toggleIcons"
+                                               href="#">
+                                                <i class="fa fa-cog"></i>
+                                            </a>
+                                            <!--<span class="menuIcons" style="display: none">
+                                                <a class="form-delete text-danger"
+                                                   href="route('image.commentdestroy', $comment) }}"
+                                                   data-toggle="tooltip"
+                                                   title="@lang('Supprimer ce commentaire')">
+                                                   <i class="fa fa-trash"></i>
+                                                </a>
+                                                <a class="description-manage"
+                                                   href="route('image.commentupdate', $comment) }}"
+                                                   data-toggle="tooltip"
+                                                   title="@lang('Modifier ce commentaire')">
+                                                   <i class="fa fa-comment"></i>
+                                                </a>
+                                            </span>
+                                            <form action="route('comment.destroy', $comment) }}" method="POST" class="hide">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>-->
+                                        </span>
+                                        @endadminOrOwner
+                                    </div>
+                                    <div class="card-body col-12">
+                                        {{ $comment->comment }}
+                                    </div>
+                                    <div class="card-subtitle col-12">
+                                        @if($comment->updated_at)
+                                            {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $comment->updated_at, 'Europe/Paris')->diffForHumans() }}
+                                        @endif
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                        <!--
+                        Put here the comment part
+                        if the actual user doesn't comment picture, add an input
+                        else show is comment
+
+                        Show all other comments for this pictures
+                         -->
                     </div>
                 </div>
             @endforeach
@@ -214,15 +273,15 @@
             $('.site-wrapper').fadeOut(1000)
 
             $('.star-rating div').click((e) => {
-                @auth
-                    let element = $(e.currentTarget)
-                    let values = element.attr('id').split('.')
-                    element.addClass('fa-spin')
-                    $.ajax({
-                        url: "{{ url('rating') }}" + '/' + values[0],
-                        type: 'PUT',
-                        data: {value: values[1]}
-                    })
+                    @auth
+                let element = $(e.currentTarget)
+                let values = element.attr('id').split('.')
+                element.addClass('fa-spin')
+                $.ajax({
+                    url: "{{ url('rating') }}" + '/' + values[0],
+                    type: 'PUT',
+                    data: {value: values[1]}
+                })
                     .done((data) => {
                         if (data.status === 'ok') {
                             let image = $('#' + data.id)
@@ -239,8 +298,8 @@
                                 .end()
                                 .find('span.count-number')
                                 .text('(' + data.count + ')')
-                            if(data.rate) {
-                                if(data.rate == values[1]) {
+                            if (data.rate) {
+                                if (data.rate == values[1]) {
                                     title = '@lang("Vous avez déjà donné cette note !")'
                                 } else {
                                     title = '@lang("Votre vote a été modifié !")'
@@ -265,10 +324,10 @@
                         element.removeClass('fa-spin')
                     })
                 @else
-                    swal({
-                        title: '@lang('Vous devez être connecté pour pouvoir voter !')',
-                        type: 'error'
-                    })
+                swal({
+                    title: '@lang('Vous devez être connecté pour pouvoir voter !')',
+                    type: 'error'
+                })
                 @endauth
             })
 
@@ -282,7 +341,7 @@
                     method: 'patch',
                     url: that.attr('data-link')
                 }).done((data) => {
-                    if(data.increment) {
+                    if (data.increment) {
                         let numberElement = that.siblings('div.card-footer').find('.image-click')
                         numberElement.text(parseInt(numberElement.text()) + 1)
                     }
@@ -341,7 +400,7 @@
                 let that = $(e.currentTarget)
                 let icon = that.children()
                 let adult = icon.hasClass('fa-graduation-cap')
-                if(adult) {
+                if (adult) {
                     icon.removeClass('fa-graduation-cap')
                 } else {
                     icon.removeClass('fa-child')
@@ -351,14 +410,14 @@
                 $.ajax({
                     method: 'put',
                     url: that.attr('href'),
-                    data: { adult: adult }
+                    data: {adult: adult}
                 })
                     .done(() => {
                         that.tooltip('hide')
                         let icon = that.children()
                         icon.removeClass('fa-cog fa-spin')
                         let card = that.parents('.card')
-                        if(adult) {
+                        if (adult) {
                             icon.addClass('fa-graduation-cap')
                             card.addClass('border-danger')
                         } else {
@@ -391,7 +450,7 @@
                     .done((data) => {
                         let card = $('#image' + data.id)
                         let body = card.find('.card-body')
-                        if(body.length) {
+                        if (body.length) {
                             body.children().text(data.description)
                         } else {
                             card.children('a').after('<div class="card-body"><p class="card-text">' + data.description + '</p></div>')
@@ -399,7 +458,7 @@
                         $('#changeDescription').modal('hide')
                     })
                     .fail((data) => {
-                        if(data.status === 422) {
+                        if (data.status === 422) {
                             $.each(data.responseJSON.errors, function (key, value) {
                                 $('#descriptionForm input[name=' + key + ']').addClass('is-invalid').next().text(value)
                             })
@@ -437,7 +496,7 @@
                     data: that.serialize()
                 })
                     .done((data) => {
-                        if(data === 'reload') {
+                        if (data === 'reload') {
                             location.reload();
                         } else {
                             $('#editAlbums').modal('hide')
@@ -456,13 +515,13 @@
                             memoStars.push($(element).hasClass('star-yellow'))
                         })
                         .removeClass('star-yellow')
-             }, (e) => {
-                $.each(memoStars, (index, value) => {
-                    if(value) {
-                        $(e.currentTarget).children('div:eq(' + index + ')').addClass('star-yellow')
-                    }
+                }, (e) => {
+                    $.each(memoStars, (index, value) => {
+                        if (value) {
+                            $(e.currentTarget).children('div:eq(' + index + ')').addClass('star-yellow')
+                        }
+                    })
                 })
-            })
 
         })
     </script>

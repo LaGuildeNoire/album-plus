@@ -47,15 +47,23 @@ class RatingsTableSeeder extends Seeder
                 'user_id' => 2,
                 'rating' => 2,
             ],
-            7 => [
+            8 => [
                 'image_id' => 31,
                 'user_id' => 3,
                 'rating' => 3,
             ],
-            8 => [
+            9 => [
                 'image_id' => 32,
                 'user_id' => 3,
                 'rating' => 3,
+            ]
+        ]);
+
+        \DB::table('image_user')->insert([
+            0 => [
+                'image_id' => 43,
+                'user_id' => 2,
+                'comment' => "Test",
             ]
         ]);
     }
